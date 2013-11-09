@@ -4,3 +4,10 @@
 *.jar
 *.war
 *.ear
+
+#idea
+*.iml
+.idea
+
+#other
+examples_CAMEL
