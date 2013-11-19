@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.redhat.mw.consumer;
+package org.apache.camel.component.dropbox.consumer;
 
-import it.redhat.mw.DropboxConfiguration;
-import it.redhat.mw.DropboxEndpoint;
+import org.apache.camel.component.dropbox.DropboxConfiguration;
+import org.apache.camel.component.dropbox.DropboxEndpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.ScheduledPollConsumer;

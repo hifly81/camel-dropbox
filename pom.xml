@@ -21,7 +21,7 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>it.redhat.mw</groupId>
+  <groupId>org.apache.camel.component.dropbox</groupId>
   <artifactId>camel-dropbox</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>

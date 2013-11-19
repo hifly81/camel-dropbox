@@ -1,8 +1,7 @@
-package it.redhat.mw.consumer;
+package org.apache.camel.component.dropbox.consumer;
 
-import it.redhat.mw.DropboxConfiguration;
-import it.redhat.mw.DropboxEndpoint;
-import org.apache.camel.Endpoint;
+import org.apache.camel.component.dropbox.DropboxConfiguration;
+import org.apache.camel.component.dropbox.DropboxEndpoint;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 

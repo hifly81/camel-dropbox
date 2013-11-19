@@ -1,4 +1,4 @@
-package it.redhat.mw;
+package org.apache.camel.component.dropbox;
 
 import com.dropbox.core.*;
 import org.apache.camel.spi.UriParam;
