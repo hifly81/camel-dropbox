@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.redhat.mw;
+package it.redhat.mw.producer;
 
+import it.redhat.mw.DropboxConfiguration;
+import it.redhat.mw.DropboxEndpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultProducer;
 import org.slf4j.Logger;

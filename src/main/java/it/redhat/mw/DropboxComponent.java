@@ -31,19 +31,20 @@ public class DropboxComponent extends DefaultComponent {
     private String remotepath;
 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-        DropboxConfiguration properties = new DropboxConfiguration();
+        DropboxConfiguration configuration = new DropboxConfiguration();
 
         // set options from component
-        properties.setAppKey(appKey);
-        properties.setAppSecret(appSecret);
-        properties.setRemotepath(remotepath);
+        configuration.setAppKey(appKey);
+        configuration.setAppSecret(appSecret);
+        configuration.setRemotepath(remotepath);
 
         // and then override from parameters
-        setProperties(properties, parameters);
+        setProperties(configuration, parameters);
 
-        //TODO need to create the dropbox client
+        //create dropbox client
+        configuration.createClient();
 
-        Endpoint endpoint = new DropboxEndpoint(uri, this,properties);
+        Endpoint endpoint = new DropboxEndpoint(uri,this,configuration);
         return endpoint;
     }
 

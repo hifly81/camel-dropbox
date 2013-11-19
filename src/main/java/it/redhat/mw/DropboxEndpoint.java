@@ -16,6 +16,8 @@
  */
 package it.redhat.mw;
 
+import it.redhat.mw.consumer.DropboxSimplePollConsumer;
+import it.redhat.mw.producer.DropboxSimpleProducer;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
