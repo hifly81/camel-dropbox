@@ -29,7 +29,6 @@ import org.apache.camel.spi.UriParam;
  */
 public class DropboxEndpoint extends DefaultEndpoint {
 
-    @UriParam
     private DropboxConfiguration configuration = null;
 
     public DropboxEndpoint() {

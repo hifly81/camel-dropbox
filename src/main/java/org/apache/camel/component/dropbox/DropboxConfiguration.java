@@ -20,13 +20,11 @@ public class DropboxConfiguration {
      Dropbox auth
      */
 
-    @UriParam
     private String appKey;
-    @UriParam
-    private static String appSecret;
+    private String appSecret;
+    private String accessToken;
 
     //file path on dropbox
-    @UriParam
     private String remotepath;
 
     //reference to dropboxclient
@@ -51,27 +49,11 @@ public class DropboxConfiguration {
          */
         String clientIdentifier = "camel-dropbox/1.0";
 
-
         DbxAppInfo appInfo = new DbxAppInfo(appKey, appSecret);
         DbxRequestConfig config =
                 new DbxRequestConfig(clientIdentifier, Locale.getDefault().toString());
-        DbxWebAuthNoRedirect webAuth = new DbxWebAuthNoRedirect(config, appInfo);
-
-        String authorizeUrl = webAuth.start();
-        //TODO get the code from authorize URL
-        String code = "";
-
-        //TODO define a custom exception
-        DbxAuthFinish authFinish = null;
-        try {
-            authFinish = webAuth.finish(code);
-        }
-        catch (DbxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        DbxClient client = new DbxClient(config, authFinish.accessToken);
-
+        //TODO need that an access token has been already granted for this app
+        DbxClient client = new DbxClient(config, accessToken);
         return client;
 
     }
@@ -91,6 +73,14 @@ public class DropboxConfiguration {
 
     public void setAppKey(String appKey) {
         this.appKey = appKey;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getRemotepath() {

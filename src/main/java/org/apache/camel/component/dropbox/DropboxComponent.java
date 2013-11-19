@@ -26,17 +26,16 @@ import org.apache.camel.impl.DefaultComponent;
  */
 public class DropboxComponent extends DefaultComponent {
 
-    private String appKey;
-    private String appSecret;
-    private String remotepath;
 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         DropboxConfiguration configuration = new DropboxConfiguration();
 
+
         // set options from component
-        configuration.setAppKey(appKey);
-        configuration.setAppSecret(appSecret);
-        configuration.setRemotepath(remotepath);
+        configuration.setAppKey((String)parameters.get("appKey"));
+        configuration.setAppSecret((String)parameters.get("appSecret"));
+        configuration.setAccessToken((String)parameters.get("accessToken"));
+        configuration.setRemotepath((String)parameters.get("remotePath"));
 
         // and then override from parameters
         setProperties(configuration, parameters);
@@ -48,27 +47,4 @@ public class DropboxComponent extends DefaultComponent {
         return endpoint;
     }
 
-    public String getAppKey() {
-        return appKey;
-    }
-
-    public void setAppKey(String appKey) {
-        this.appKey = appKey;
-    }
-
-    public String getAppSecret() {
-        return appSecret;
-    }
-
-    public void setAppSecret(String appSecret) {
-        this.appSecret = appSecret;
-    }
-
-    public String getRemotepath() {
-        return remotepath;
-    }
-
-    public void setRemotepath(String remotepath) {
-        this.remotepath = remotepath;
-    }
 }

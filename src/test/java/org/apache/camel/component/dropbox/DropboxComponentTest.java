@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package it.redhat.mw;
+package org.apache.camel.component.dropbox;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
@@ -45,8 +45,8 @@ public class DropboxComponentTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("dropbox://foo")
-                  .to("dropbox://bar")
+                from("mock:test")
+                  .to("dropbox://bar?appKey=XXXXXX&appSecret=XXXXXX&accessToken=XXXXXX")
                   .to("mock:result");
             }
         };

@@ -5,9 +5,14 @@
 *.war
 *.ear
 
+#target
+target
+
 #idea
 *.iml
 .idea
 
 #other
 examples_CAMEL
+
+
