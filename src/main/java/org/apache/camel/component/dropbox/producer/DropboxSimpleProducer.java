@@ -16,12 +16,18 @@
  */
 package org.apache.camel.component.dropbox.producer;
 
+import com.dropbox.core.DbxEntry;
+import com.dropbox.core.DbxWriteMode;
 import org.apache.camel.component.dropbox.DropboxConfiguration;
 import org.apache.camel.component.dropbox.DropboxEndpoint;
 import org.apache.camel.Exchange;
+import org.apache.camel.component.dropbox.util.DropboxConstants;
 import org.apache.camel.impl.DefaultProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 /**
  * The CamelDropbox producer.
@@ -38,9 +44,23 @@ public class DropboxSimpleProducer extends DefaultProducer {
     }
 
     public void process(Exchange exchange) throws Exception {
-        exchange.getIn().setHeader("MyHeader","123");
-        String body = (String) exchange.getIn().getBody();
-        exchange.getIn().setBody(body + "and the Teacher is crazy !");
+        File inputFile = new File(this.configuration.getFilePath());
+        FileInputStream inputStream = new FileInputStream(inputFile);
+        DbxEntry.File uploadedFile = null;
+        try {
+             uploadedFile =
+                    this.configuration.getClient().uploadFile("/"+this.configuration.getFilePath(),
+                    DbxWriteMode.add(), inputFile.length(), inputStream);
+            log.info("Uploaded: " + uploadedFile.toString());
+
+            //set info in exchange
+            exchange.getIn().setHeader(DropboxConstants.UPLOADED_FILE,uploadedFile.toString());
+
+        }
+        finally {
+            inputStream.close();
+        }
+
     }
 
 }

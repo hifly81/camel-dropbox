@@ -25,7 +25,7 @@ public class DropboxConfiguration {
     private String accessToken;
 
     //file path on dropbox
-    private String remotepath;
+    private String filePath;
 
     //reference to dropboxclient
     private DbxClient client;
@@ -83,12 +83,12 @@ public class DropboxConfiguration {
         this.accessToken = accessToken;
     }
 
-    public String getRemotepath() {
-        return remotepath;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setRemotepath(String remotepath) {
-        this.remotepath = remotepath;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
 }

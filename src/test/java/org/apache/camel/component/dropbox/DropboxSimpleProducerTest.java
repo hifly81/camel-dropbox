@@ -17,36 +17,44 @@
 package org.apache.camel.component.dropbox;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.dropbox.util.DropboxConstants;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
 import java.util.List;
 
-public class DropboxComponentTest extends CamelTestSupport {
+public class DropboxSimpleProducerTest extends CamelTestSupport {
 
     @Test
     public void testCamelDropbox() throws Exception {
+        template.send("direct:start", new Processor() {
+            @Override
+            public void process(Exchange exchange) throws Exception {
+                exchange.getIn().setHeader("test", "test");
+            }
+        });
+
+
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(1);       
         assertMockEndpointsSatisfied();
 
         List<Exchange> exchanges = mock.getReceivedExchanges();
         Exchange exchange = exchanges.get(0);
-        String myHeader = (String) exchange.getIn().getHeader("MyHeader");
-        assertEquals("123", myHeader);
+        String myHeader = (String) exchange.getIn().getHeader(DropboxConstants.UPLOADED_FILE);
+        assertNotNull(myHeader);
 
-        String result = (String) exchange.getIn().getBody();
-        assertEquals("Hello World!and the Teacher is crazy !", result);
     }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("mock:test")
-                  .to("dropbox://bar?appKey=XXXXXX&appSecret=XXXXXX&accessToken=XXXXXX")
+                from("direct:start")
+                  .to("dropbox://bar?appKey=XXXXX&appSecret=XXXXX&accessToken=XXXXX&filePath=XXXXX")
                   .to("mock:result");
             }
         };
