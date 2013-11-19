@@ -20,29 +20,34 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.camel.spi.UriParam;
 
 /**
- * Represents a CamelDropbox endpoint.
+ * Represents a Camel Dropbox endpoint.
  */
-public class CamelDropboxEndpoint extends DefaultEndpoint {
+public class DropboxEndpoint extends DefaultEndpoint {
 
-    public CamelDropboxEndpoint() {
+    @UriParam
+    private DropboxConfiguration configuration = null;
+
+    public DropboxEndpoint() {
     }
 
-    public CamelDropboxEndpoint(String uri, CamelDropboxComponent component) {
+    public DropboxEndpoint(String uri, DropboxComponent component,DropboxConfiguration configuration) {
         super(uri, component);
+        this.configuration = configuration;
     }
 
-    public CamelDropboxEndpoint(String endpointUri) {
+    public DropboxEndpoint(String endpointUri) {
         super(endpointUri);
     }
 
     public Producer createProducer() throws Exception {
-        return new CamelDropboxProducer(this);
+        return new DropboxSimpleProducer(this,configuration);
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new CamelDropboxConsumer(this, processor);
+        return new DropboxSimplePollConsumer(this, processor,configuration);
     }
 
     public boolean isSingleton() {

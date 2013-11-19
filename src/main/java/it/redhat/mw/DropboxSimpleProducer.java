@@ -24,17 +24,21 @@ import org.slf4j.LoggerFactory;
 /**
  * The CamelDropbox producer.
  */
-public class CamelDropboxProducer extends DefaultProducer {
-    private static final transient Logger LOG = LoggerFactory.getLogger(CamelDropboxProducer.class);
-    private CamelDropboxEndpoint endpoint;
+public class DropboxSimpleProducer extends DefaultProducer {
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxSimpleProducer.class);
+    private DropboxEndpoint endpoint;
+    private final DropboxConfiguration configuration;
 
-    public CamelDropboxProducer(CamelDropboxEndpoint endpoint) {
+    public DropboxSimpleProducer(DropboxEndpoint endpoint,DropboxConfiguration configuration) {
         super(endpoint);
         this.endpoint = endpoint;
+        this.configuration = configuration;
     }
 
     public void process(Exchange exchange) throws Exception {
-        System.out.println(exchange.getIn().getBody());    
+        exchange.getIn().setHeader("MyHeader","123");
+        String body = (String) exchange.getIn().getBody();
+        exchange.getIn().setBody(body + "and the Teacher is crazy !");
     }
 
 }

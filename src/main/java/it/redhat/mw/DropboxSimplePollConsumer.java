@@ -16,8 +16,6 @@
  */
 package it.redhat.mw;
 
-import java.util.Date;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.ScheduledPollConsumer;
@@ -25,12 +23,14 @@ import org.apache.camel.impl.ScheduledPollConsumer;
 /**
  * The CamelDropbox consumer.
  */
-public class CamelDropboxConsumer extends ScheduledPollConsumer {
-    private final CamelDropboxEndpoint endpoint;
+public class DropboxSimplePollConsumer extends ScheduledPollConsumer {
+    private final DropboxEndpoint endpoint;
+    private final DropboxConfiguration configuration;
 
-    public CamelDropboxConsumer(CamelDropboxEndpoint endpoint, Processor processor) {
+    public DropboxSimplePollConsumer(DropboxEndpoint endpoint, Processor processor, DropboxConfiguration configuration) {
         super(endpoint, processor);
         this.endpoint = endpoint;
+        this.configuration = configuration;
     }
 
     @Override
@@ -38,14 +38,14 @@ public class CamelDropboxConsumer extends ScheduledPollConsumer {
         Exchange exchange = endpoint.createExchange();
 
         // create a message body
-        Date now = new Date();
-        exchange.getIn().setBody("Hello World! The time is " + now);
+        exchange.getIn().setBody("Hello World!");
 
         try {
             // send message to next processor in the route
             getProcessor().process(exchange);
             return 1; // number of messages polled
-        } finally {
+        }
+        finally {
             // log exception if an exception occurred and was not handled
             if (exchange.getException() != null) {
                 getExceptionHandler().handleException("Error processing exchange", exchange, exchange.getException());

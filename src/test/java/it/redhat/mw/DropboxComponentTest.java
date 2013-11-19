@@ -16,19 +16,29 @@
  */
 package it.redhat.mw;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
-public class CamelDropboxComponentTest extends CamelTestSupport {
+import java.util.List;
+
+public class DropboxComponentTest extends CamelTestSupport {
 
     @Test
     public void testCamelDropbox() throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(1);       
-        
         assertMockEndpointsSatisfied();
+
+        List<Exchange> exchanges = mock.getReceivedExchanges();
+        Exchange exchange = exchanges.get(0);
+        String myHeader = (String) exchange.getIn().getHeader("MyHeader");
+        assertEquals("123", myHeader);
+
+        String result = (String) exchange.getIn().getBody();
+        assertEquals("Hello World!and the Teacher is crazy !", result);
     }
 
     @Override
