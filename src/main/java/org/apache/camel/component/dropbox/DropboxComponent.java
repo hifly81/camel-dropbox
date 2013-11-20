@@ -19,29 +19,36 @@ package org.apache.camel.component.dropbox;
 import java.util.Map;
 
 import org.apache.camel.Endpoint;
+import org.apache.camel.component.dropbox.util.DropboxOperation;
 import org.apache.camel.impl.DefaultComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents the component that manages {@link DropboxEndpoint}.
  */
 public class DropboxComponent extends DefaultComponent {
 
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxComponent.class);
 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         DropboxConfiguration configuration = new DropboxConfiguration();
 
-
         // set options from component
-        configuration.setAppKey((String)parameters.get("appKey"));
+        configuration.setAppKey((String) parameters.get("appKey"));
         configuration.setAppSecret((String)parameters.get("appSecret"));
         configuration.setAccessToken((String)parameters.get("accessToken"));
         configuration.setFilePath((String)parameters.get("filePath"));
+        configuration.setRemotePath((String)parameters.get("remotePath"));
+        configuration.setOperation(DropboxOperation.valueOf(remaining));
 
         // and then override from parameters
         setProperties(configuration, parameters);
 
         //create dropbox client
         configuration.createClient();
+
+        LOG.debug("dropbox configuration set!");
 
         Endpoint endpoint = new DropboxEndpoint(uri,this,configuration);
         return endpoint;

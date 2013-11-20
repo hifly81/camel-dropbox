@@ -1,10 +1,10 @@
 package org.apache.camel.component.dropbox;
 
 import com.dropbox.core.*;
-import org.apache.camel.spi.UriParam;
+import org.apache.camel.component.dropbox.util.DropboxOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Locale;
 
 /**
@@ -16,17 +16,19 @@ import java.util.Locale;
  */
 public class DropboxConfiguration {
 
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxConfiguration.class);
+
+
     /*
      Dropbox auth
      */
-
     private String appKey;
     private String appSecret;
     private String accessToken;
-
-    //file path on dropbox
     private String filePath;
-
+    private String remotePath;
+    //operation supported
+    private DropboxOperation operation;
     //reference to dropboxclient
     private DbxClient client;
 
@@ -34,11 +36,7 @@ public class DropboxConfiguration {
         return client;
     }
 
-    public void setClient(DbxClient client) {
-        this.client = client;
-    }
-
-    public DbxClient createClient() {
+    public void createClient() {
         /*TODO clientIdentifier
         according to the dropbox API doc:
         If you're the author a higher-level library on top of the basic SDK,
@@ -54,10 +52,13 @@ public class DropboxConfiguration {
                 new DbxRequestConfig(clientIdentifier, Locale.getDefault().toString());
         //TODO need that an access token has been already granted for this app
         DbxClient client = new DbxClient(config, accessToken);
-        return client;
+        //TODO define custom exception
+        if(client == null) {
+            throw new IllegalStateException("cant establish Dropbox conenction!");
+        }
+        this.client = client;
 
     }
-
 
     public String getAppSecret() {
         return appSecret;
@@ -89,6 +90,22 @@ public class DropboxConfiguration {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getRemotePath() {
+        return remotePath;
+    }
+
+    public void setRemotePath(String remotePath) {
+        this.remotePath = remotePath;
+    }
+
+    public DropboxOperation getOperation() {
+        return operation;
+    }
+
+    public void setOperation(DropboxOperation operation) {
+        this.operation = operation;
     }
 
 }
