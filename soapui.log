@@ -1,0 +1,5 @@
+2013-11-20 20:33:30,419 WARN  [DefaultSoapUICore] Missing folder [/home/hifly/ext] for external libraries
+2013-11-20 20:33:30,597 INFO  [DefaultSoapUICore] initialized soapui-settings from [/home/hifly/soapui-settings.xml]
+2013-11-20 20:33:30,958 INFO  [WorkspaceImpl] Loading workspace from [/home/hifly/intellij-soapui-workspace.xml]
+2013-11-20 20:57:56,172 INFO  [WorkspaceImpl] Saved workspace to [/home/hifly/intellij-soapui-workspace.xml]
+2013-11-20 20:57:56,175 INFO  [DefaultSoapUICore] Settings saved to [/home/hifly/soapui-settings.xml]

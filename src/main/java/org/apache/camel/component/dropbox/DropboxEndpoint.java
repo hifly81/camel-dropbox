@@ -17,6 +17,7 @@
 package org.apache.camel.component.dropbox;
 
 import org.apache.camel.component.dropbox.consumer.DropboxSimplePollConsumer;
+import org.apache.camel.component.dropbox.producer.DropboxDelProducer;
 import org.apache.camel.component.dropbox.producer.DropboxListProducer;
 import org.apache.camel.component.dropbox.producer.DropboxPutProducer;
 import org.apache.camel.Consumer;
@@ -56,6 +57,9 @@ public class DropboxEndpoint extends DefaultEndpoint {
         }
         else if(this.configuration.getOperation() == DropboxOperation.list) {
             return new DropboxListProducer(this,this.configuration);
+        }
+        else if(this.configuration.getOperation() == DropboxOperation.del) {
+            return new DropboxDelProducer(this,this.configuration);
         }
         return null;
     }

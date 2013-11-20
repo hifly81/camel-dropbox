@@ -44,8 +44,10 @@ public class DropboxProducerPutSingleFileTest extends CamelTestSupport {
 
         List<Exchange> exchanges = mock.getReceivedExchanges();
         Exchange exchange = exchanges.get(0);
+        Object headerCode =  exchange.getIn().getHeader(DropboxConstants.RESULT_OP_CODE);
         Object header =  exchange.getIn().getHeader(DropboxConstants.UPLOADED_FILE);
         Object body = exchange.getIn().getBody();
+        assertNotNull(headerCode);
         assertNotNull(header);
         assertNotNull(body);
 
@@ -56,7 +58,7 @@ public class DropboxProducerPutSingleFileTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start")
-                        .to("dropbox://put?appKey=XXX&appSecret=XXX&accessToken=XXX&filePath=/XXX")
+                        .to("dropbox://put?appKey=XXX&appSecret=XXX&accessToken=XXX&localPath=/XXX")
                         .to("mock:result");
             }
         };

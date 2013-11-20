@@ -38,7 +38,7 @@ public class DropboxComponent extends DefaultComponent {
         configuration.setAppKey((String) parameters.get("appKey"));
         configuration.setAppSecret((String)parameters.get("appSecret"));
         configuration.setAccessToken((String)parameters.get("accessToken"));
-        configuration.setFilePath((String)parameters.get("filePath"));
+        configuration.setLocalPath((String)parameters.get("localPath"));
         configuration.setRemotePath((String)parameters.get("remotePath"));
         configuration.setOperation(DropboxOperation.valueOf(remaining));
 

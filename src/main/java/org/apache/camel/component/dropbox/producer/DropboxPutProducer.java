@@ -16,16 +16,15 @@
  */
 package org.apache.camel.component.dropbox.producer;
 
-import com.dropbox.core.DbxEntry;
 import org.apache.camel.component.dropbox.DropboxConfiguration;
 import org.apache.camel.component.dropbox.DropboxEndpoint;
 import org.apache.camel.Exchange;
-import org.apache.camel.component.dropbox.util.DropboxAPIFacade;
-import org.apache.camel.impl.DefaultProducer;
+import org.apache.camel.component.dropbox.api.DropboxAPIFacade;
+import org.apache.camel.component.dropbox.dto.DropboxCamelResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.apache.camel.component.dropbox.util.DropboxConstants.UPLOADED_FILE;
+import static org.apache.camel.component.dropbox.util.DropboxResultOpCode.OK;
 
 public class DropboxPutProducer extends DropboxProducer {
     private static final transient Logger LOG = LoggerFactory.getLogger(DropboxPutProducer.class);
@@ -36,12 +35,11 @@ public class DropboxPutProducer extends DropboxProducer {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        DbxEntry.File uploadedFile = DropboxAPIFacade.getInstance(this.configuration.getClient())
-                .putSingleFile(this.configuration.getFilePath());
-        log.info("Uploaded: " + uploadedFile.toString());
-        //set info in exchange
-        exchange.getIn().setHeader(UPLOADED_FILE,uploadedFile.toString());
-        exchange.getIn().setBody(uploadedFile.toString());
+        DropboxCamelResult result = DropboxAPIFacade.getInstance(this.configuration.getClient())
+                .putSingleFile(this.configuration.getLocalPath());
+        result.createResultOpCode(exchange,OK);
+        result.populateExchange(exchange);
+        log.info("Uploaded: " + result.toString());
 
     }
 

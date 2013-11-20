@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class DropboxProducerListTest extends CamelTestSupport {
+public class DropboxProducerDelTest extends CamelTestSupport {
 
     @Test
     public void testCamelDropbox() throws Exception {
@@ -45,11 +45,7 @@ public class DropboxProducerListTest extends CamelTestSupport {
         List<Exchange> exchanges = mock.getReceivedExchanges();
         Exchange exchange = exchanges.get(0);
         Object headerCode =  exchange.getIn().getHeader(DropboxConstants.RESULT_OP_CODE);
-        Object header = exchange.getIn().getHeader(DropboxConstants.ENTRIES_SIZE);
-        Object body = exchange.getIn().getBody();
         assertNotNull(headerCode);
-        assertNotNull(header);
-        assertNotNull(body);
 
     }
 
@@ -58,7 +54,7 @@ public class DropboxProducerListTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start")
-                        .to("dropbox://list?appKey=XXX&appSecret=XXX&accessToken=XXX&remotePath=/")
+                        .to("dropbox://del?appKey=XXX&appSecret=XXX&accessToken=XXX&remotePath=/test")
                         .to("mock:result");
             }
         };

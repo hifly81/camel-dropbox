@@ -26,22 +26,21 @@ import org.slf4j.LoggerFactory;
 
 import static org.apache.camel.component.dropbox.util.DropboxResultOpCode.OK;
 
-/**
- * The CamelDropbox producer.
- */
-public class DropboxListProducer extends DropboxProducer {
-    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxListProducer.class);
+public class DropboxDelProducer extends DropboxProducer {
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxDelProducer.class);
 
-    public DropboxListProducer(DropboxEndpoint endpoint, DropboxConfiguration configuration) {
+    public DropboxDelProducer(DropboxEndpoint endpoint, DropboxConfiguration configuration) {
         super(endpoint,configuration);
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
         DropboxCamelResult result = DropboxAPIFacade.getInstance(this.configuration.getClient())
-                .list(this.configuration.getRemotePath());
+                .del(this.configuration.getRemotePath());
         result.createResultOpCode(exchange,OK);
         result.populateExchange(exchange);
+        log.info("Deleted: " + this.configuration.getRemotePath());
+
     }
 
 }

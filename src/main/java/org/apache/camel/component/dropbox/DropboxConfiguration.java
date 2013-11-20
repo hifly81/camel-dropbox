@@ -25,7 +25,7 @@ public class DropboxConfiguration {
     private String appKey;
     private String appSecret;
     private String accessToken;
-    private String filePath;
+    private String localPath;
     private String remotePath;
     //operation supported
     private DropboxOperation operation;
@@ -84,12 +84,12 @@ public class DropboxConfiguration {
         this.accessToken = accessToken;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getLocalPath() {
+        return localPath;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
     }
 
     public String getRemotePath() {
