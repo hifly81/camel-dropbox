@@ -27,20 +27,14 @@ import org.slf4j.LoggerFactory;
 
 import static org.apache.camel.component.dropbox.util.DropboxConstants.UPLOADED_FILE;
 
-/**
- * The CamelDropbox producer.
- */
-public class DropboxPutProducer extends DefaultProducer {
+public class DropboxPutProducer extends DropboxProducer {
     private static final transient Logger LOG = LoggerFactory.getLogger(DropboxPutProducer.class);
-    private DropboxEndpoint endpoint;
-    private final DropboxConfiguration configuration;
 
     public DropboxPutProducer(DropboxEndpoint endpoint, DropboxConfiguration configuration) {
-        super(endpoint);
-        this.endpoint = endpoint;
-        this.configuration = configuration;
+        super(endpoint,configuration);
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         DbxEntry.File uploadedFile = DropboxAPIFacade.getInstance(this.configuration.getClient())
                 .putSingleFile(this.configuration.getFilePath());

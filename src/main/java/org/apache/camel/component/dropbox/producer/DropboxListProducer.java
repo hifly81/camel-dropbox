@@ -32,17 +32,14 @@ import static org.apache.camel.component.dropbox.util.DropboxConstants.ENTRIES_S
 /**
  * The CamelDropbox producer.
  */
-public class DropboxListProducer extends DefaultProducer {
+public class DropboxListProducer extends DropboxProducer {
     private static final transient Logger LOG = LoggerFactory.getLogger(DropboxListProducer.class);
-    private DropboxEndpoint endpoint;
-    private final DropboxConfiguration configuration;
 
     public DropboxListProducer(DropboxEndpoint endpoint, DropboxConfiguration configuration) {
-        super(endpoint);
-        this.endpoint = endpoint;
-        this.configuration = configuration;
+        super(endpoint,configuration);
     }
 
+    @Override
     public void process(Exchange exchange) throws Exception {
         List<DbxEntry> entries = DropboxAPIFacade.getInstance(this.configuration.getClient())
                 .list(this.configuration.getRemotePath());
