@@ -3,13 +3,13 @@ package org.apache.camel.component.dropbox.api;
 import com.dropbox.core.DbxClient;
 import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxWriteMode;
-import org.apache.camel.component.dropbox.dto.DropboxCamelResult;
-import org.apache.camel.component.dropbox.dto.DropboxFileCamelResult;
-import org.apache.camel.component.dropbox.dto.DropboxGenericCamelResult;
-import org.apache.camel.component.dropbox.dto.DropboxListCamelResult;
+import org.apache.camel.component.dropbox.dto.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.camel.component.dropbox.util.DropboxConstants.DROPBOX_FILE_SEPARATOR;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -21,6 +21,8 @@ import java.io.FileInputStream;
  * To change this template use File | Settings | File Templates.
  */
 public class DropboxAPIFacade {
+
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxAPIFacade.class);
 
     private static DropboxAPIFacade instance;
     private static DbxClient client;
@@ -35,17 +37,17 @@ public class DropboxAPIFacade {
         return instance;
     }
 
-    public DropboxCamelResult putSingleFile(String filePath) throws Exception {
-        File inputFile = new File(filePath);
+    public DropboxCamelResult putSingleFile(String localPath) throws Exception {
+        File inputFile = new File(localPath);
         FileInputStream inputStream = new FileInputStream(inputFile);
         DbxEntry.File uploadedFile = null;
         DropboxCamelResult result = null;
         try {
             uploadedFile =
-                    instance.client.uploadFile(DROPBOX_FILE_SEPARATOR+filePath,
+                    instance.client.uploadFile(DROPBOX_FILE_SEPARATOR+localPath,
                             DbxWriteMode.add(), inputFile.length(), inputStream);
-            result = new DropboxFileCamelResult();
-            result.setDropboxObj(uploadedFile);
+            result = new DropboxFileUploadCamelResult();
+            result.setDropboxObjs(uploadedFile);
             return result;
         }
         finally {
@@ -58,7 +60,7 @@ public class DropboxAPIFacade {
         DropboxCamelResult result = null;
         DbxEntry.WithChildren listing = instance.client.getMetadataWithChildren(remotePath);
         result = new DropboxListCamelResult();
-        result.setDropboxObj(listing.children);
+        result.setDropboxObjs(listing.children);
         return result;
     }
 
@@ -69,6 +71,16 @@ public class DropboxAPIFacade {
         return result;
     }
 
+    public DropboxCamelResult get(String remotePath) throws Exception {
+        DropboxCamelResult result = null;
+        //create a baos
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DbxEntry.File downloadedFile = instance.client.getFile(remotePath,null,baos);
+        result = new DropboxFileDownloadCamelResult();
+        result.setDropboxObjs(remotePath,baos);
+        LOG.info("downloaded baos size:"+baos.size());
+        return result;
+    }
 
 
 }

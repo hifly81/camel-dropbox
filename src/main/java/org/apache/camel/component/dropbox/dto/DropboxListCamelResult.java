@@ -26,8 +26,8 @@ public class DropboxListCamelResult extends DropboxCamelResult {
 
     @Override
     public void populateExchange(Exchange exchange) {
-        if(this.dropboxObj!=null) {
-            List<DbxEntry> entries = (List<DbxEntry>)this.dropboxObj;
+        if(this.dropboxObjs[0]!=null) {
+            List<DbxEntry> entries = (List<DbxEntry>)this.dropboxObjs[0];
             if(entries.size()>0) {
                 LOG.info("Entries found: " + entries.size());
                 //set info in exchange

@@ -11,11 +11,11 @@ import static org.apache.camel.component.dropbox.util.DropboxConstants.UPLOADED_
  * Time: 7:38 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DropboxFileCamelResult extends DropboxCamelResult {
+public class DropboxFileUploadCamelResult extends DropboxCamelResult {
     @Override
     public void populateExchange(Exchange exchange) {
         //set info in exchange
-        exchange.getIn().setHeader(UPLOADED_FILE, this.dropboxObj.toString());
-        exchange.getIn().setBody(this.dropboxObj.toString());
+        exchange.getIn().setHeader(UPLOADED_FILE, this.dropboxObjs[0].toString());
+        exchange.getIn().setBody(this.dropboxObjs[0].toString());
     }
 }

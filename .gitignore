@@ -5,6 +5,9 @@
 *.war
 *.ear
 
+# Log Files 
+*.log
+
 #target
 target
 

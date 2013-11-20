@@ -15,6 +15,7 @@ public final class DropboxConstants {
     public static final String DROPBOX_FILE_SEPARATOR = "/";
     public static final String RESULT_OP_CODE = "RESULT_OP_CODE";
     public static final String UPLOADED_FILE = "UPLOADED_FILE";
+    public static final String DOWNLOADED_FILE = "DOWNLOADED_FILE";
     public static final String ENTRIES_SIZE = "ENTRIES_SIZE";
     public static final String ENTRIES = "ENTRIES";
 }

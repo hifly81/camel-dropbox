@@ -14,18 +14,18 @@ import static org.apache.camel.component.dropbox.util.DropboxConstants.RESULT_OP
  */
 public abstract class DropboxCamelResult {
 
-    protected Object dropboxObj;
+    protected Object[] dropboxObjs;
 
     public abstract void populateExchange(Exchange exchange);
     public void createResultOpCode(Exchange exchange,String code) {
         exchange.getIn().setHeader(RESULT_OP_CODE, code);
     }
 
-    public Object getDropboxObj() {
-        return dropboxObj;
+    public Object[] getDropboxObjs() {
+        return dropboxObjs;
     }
 
-    public void setDropboxObj(Object dropboxObj) {
-        this.dropboxObj = dropboxObj;
+    public void setDropboxObjs(Object... dropboxObjs) {
+        this.dropboxObjs = dropboxObjs;
     }
 }
