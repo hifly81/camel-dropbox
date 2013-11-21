@@ -39,7 +39,7 @@ public class DropboxGetProducer extends DropboxProducer {
                 .get(this.configuration.getRemotePath());
         result.createResultOpCode(exchange,OK);
         result.populateExchange(exchange);
-        log.info("Downloaded: " + result.toString());
+        LOG.info("producer --> downloaded: " + result.toString());
 
     }
 

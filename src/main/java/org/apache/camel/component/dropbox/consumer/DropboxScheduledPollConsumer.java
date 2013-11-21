@@ -21,37 +21,21 @@ import org.apache.camel.component.dropbox.DropboxEndpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.ScheduledPollConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * The CamelDropbox consumer.
- */
-public class DropboxSimplePollConsumer extends ScheduledPollConsumer {
-    private final DropboxEndpoint endpoint;
-    private final DropboxConfiguration configuration;
 
-    public DropboxSimplePollConsumer(DropboxEndpoint endpoint, Processor processor, DropboxConfiguration configuration) {
+public abstract class DropboxScheduledPollConsumer extends ScheduledPollConsumer {
+    protected static final transient Logger LOG = LoggerFactory.getLogger(DropboxScheduledPollConsumer.class);
+    protected DropboxEndpoint endpoint;
+    protected DropboxConfiguration configuration;
+
+    public DropboxScheduledPollConsumer(DropboxEndpoint endpoint, Processor processor, DropboxConfiguration configuration) {
         super(endpoint, processor);
         this.endpoint = endpoint;
         this.configuration = configuration;
     }
 
     @Override
-    protected int poll() throws Exception {
-        Exchange exchange = endpoint.createExchange();
-
-        // create a message body
-        exchange.getIn().setBody("Hello World!");
-
-        try {
-            // send message to next processor in the route
-            getProcessor().process(exchange);
-            return 1; // number of messages polled
-        }
-        finally {
-            // log exception if an exception occurred and was not handled
-            if (exchange.getException() != null) {
-                getExceptionHandler().handleException("Error processing exchange", exchange, exchange.getException());
-            }
-        }
-    }
+    protected abstract int poll() throws Exception;
 }

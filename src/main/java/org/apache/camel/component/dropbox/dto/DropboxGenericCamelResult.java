@@ -14,6 +14,6 @@ import static org.apache.camel.component.dropbox.util.DropboxConstants.UPLOADED_
 public class DropboxGenericCamelResult extends DropboxCamelResult {
     @Override
     public void populateExchange(Exchange exchange) {
-        //TODO
+       throw new UnsupportedOperationException("Method not implemented!");
     }
 }

@@ -16,11 +16,11 @@ public class DropboxFileDownloadCamelResult extends DropboxCamelResult {
     public void populateExchange(Exchange exchange) {
         //set info in exchange
         exchange.getIn().setHeader(DOWNLOADED_FILE, this.dropboxObjs[0].toString());
-        exchange.getIn().setBody(this.dropboxObjs[1].toString());
+        exchange.getIn().setBody(this.dropboxObjs[1]);
     }
 
     @Override
     public String toString() {
-              return this.dropboxObjs[0].toString();
+        return this.dropboxObjs[0].toString();
     }
 }

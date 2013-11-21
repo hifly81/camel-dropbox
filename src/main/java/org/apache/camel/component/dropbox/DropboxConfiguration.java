@@ -52,7 +52,6 @@ public class DropboxConfiguration {
         DbxAppInfo appInfo = new DbxAppInfo(appKey, appSecret);
         DbxRequestConfig config =
                 new DbxRequestConfig(clientIdentifier, Locale.getDefault().toString());
-        //TODO need that an access token has been already granted for this app
         DbxClient client = new DbxClient(config, accessToken);
         //TODO define custom exception
         if(client == null) {

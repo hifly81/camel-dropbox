@@ -16,7 +16,8 @@
  */
 package org.apache.camel.component.dropbox;
 
-import org.apache.camel.component.dropbox.consumer.DropboxSimplePollConsumer;
+import org.apache.camel.component.dropbox.consumer.DropboxScheduledPollConsumer;
+import org.apache.camel.component.dropbox.consumer.DropboxScheduledPollGetConsumer;
 import org.apache.camel.component.dropbox.producer.*;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -48,8 +49,8 @@ public class DropboxEndpoint extends DefaultEndpoint {
     }
 
     public Producer createProducer() throws Exception {
-        LOG.debug("resolve dropbox endpoint {" + this.configuration.getOperation().toString() + "}");
-        LOG.debug("resolve dropbox attached client:"+this.configuration.getClient());
+        LOG.debug("resolve producer dropbox endpoint {" + this.configuration.getOperation().toString() + "}");
+        LOG.debug("resolve producer dropbox attached client:"+this.configuration.getClient());
         if(this.configuration.getOperation() == DropboxOperation.put) {
             return new DropboxPutProducer(this,this.configuration);
         }
@@ -65,12 +66,24 @@ public class DropboxEndpoint extends DefaultEndpoint {
         else if(this.configuration.getOperation() == DropboxOperation.move) {
             return new DropboxMoveProducer(this,this.configuration);
         }
-        //TODO define a default exit condition
-        return null;
+        else {
+            throw new IllegalArgumentException("operation specified is not supprted by this component!");
+        }
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
-        return new DropboxSimplePollConsumer(this, processor,configuration);
+        LOG.debug("resolve consumer dropbox endpoint {" + this.configuration.getOperation().toString() + "}");
+        LOG.debug("resolve consumer dropbox attached client:"+this.configuration.getClient());
+        if(this.configuration.getOperation() == DropboxOperation.search) {
+            //TODO implement search consumer
+            return new DropboxScheduledPollGetConsumer(this, processor,configuration);
+        }
+        else if(this.configuration.getOperation() == DropboxOperation.get) {
+            return new DropboxScheduledPollGetConsumer(this, processor,configuration);
+        }
+        else {
+            throw new IllegalArgumentException("operation specified is not supprted by this component!");
+        }
     }
 
     public boolean isSingleton() {

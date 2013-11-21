@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.dropbox.producer;
+package org.apache.camel.component.dropbox.consumer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -27,17 +27,10 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class DropboxProducerGetTest extends CamelTestSupport {
+public class DropboxConsumerGetTest extends CamelTestSupport {
 
     @Test
     public void testCamelDropbox() throws Exception {
-        template.send("direct:start", new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader("test", "test");
-            }
-        });
-
 
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(1);       
@@ -59,8 +52,7 @@ public class DropboxProducerGetTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:start")
-                        .to("dropbox://get?appKey=XXX&appSecret=XXX&accessToken=XXX&remotePath=/test.pdf")
+                from("dropbox://get?appKey=XXX&appSecret=XXX&accessToken=XXX&remotePath=/XXX")
                         .to("file:///XXX?fileName=XXX")
                         .to("mock:result");
             }
