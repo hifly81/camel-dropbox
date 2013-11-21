@@ -10,8 +10,9 @@ package org.apache.camel.component.dropbox.util;
 public enum DropboxOperation {
     put("put"),
     del("del"),
-    list("list"),
-    get("get");
+    search("search"),
+    get("get"),
+    move("move");
 
     private DropboxOperation(final String text) {
         this.text = text;

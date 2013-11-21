@@ -17,10 +17,7 @@
 package org.apache.camel.component.dropbox;
 
 import org.apache.camel.component.dropbox.consumer.DropboxSimplePollConsumer;
-import org.apache.camel.component.dropbox.producer.DropboxDelProducer;
-import org.apache.camel.component.dropbox.producer.DropboxGetProducer;
-import org.apache.camel.component.dropbox.producer.DropboxListProducer;
-import org.apache.camel.component.dropbox.producer.DropboxPutProducer;
+import org.apache.camel.component.dropbox.producer.*;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -56,14 +53,17 @@ public class DropboxEndpoint extends DefaultEndpoint {
         if(this.configuration.getOperation() == DropboxOperation.put) {
             return new DropboxPutProducer(this,this.configuration);
         }
-        else if(this.configuration.getOperation() == DropboxOperation.list) {
-            return new DropboxListProducer(this,this.configuration);
+        else if(this.configuration.getOperation() == DropboxOperation.search) {
+            return new DropboxSearchProducer(this,this.configuration);
         }
         else if(this.configuration.getOperation() == DropboxOperation.del) {
             return new DropboxDelProducer(this,this.configuration);
         }
         else if(this.configuration.getOperation() == DropboxOperation.get) {
             return new DropboxGetProducer(this,this.configuration);
+        }
+        else if(this.configuration.getOperation() == DropboxOperation.move) {
+            return new DropboxMoveProducer(this,this.configuration);
         }
         //TODO define a default exit condition
         return null;

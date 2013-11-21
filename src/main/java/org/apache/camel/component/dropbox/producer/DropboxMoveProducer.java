@@ -29,19 +29,20 @@ import static org.apache.camel.component.dropbox.util.DropboxResultOpCode.OK;
 /**
  * The CamelDropbox producer.
  */
-public class DropboxListProducer extends DropboxProducer {
-    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxListProducer.class);
+public class DropboxMoveProducer extends DropboxProducer {
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxMoveProducer.class);
 
-    public DropboxListProducer(DropboxEndpoint endpoint, DropboxConfiguration configuration) {
+    public DropboxMoveProducer(DropboxEndpoint endpoint, DropboxConfiguration configuration) {
         super(endpoint,configuration);
     }
 
     @Override
     public void process(Exchange exchange) throws Exception {
         DropboxCamelResult result = DropboxAPIFacade.getInstance(this.configuration.getClient())
-                .list(this.configuration.getRemotePath());
+                .move(this.configuration.getRemotePath(),this.configuration.getNewRemotePath());
         result.createResultOpCode(exchange,OK);
         result.populateExchange(exchange);
+        log.info("Moved from " + this.configuration.getRemotePath()+" to "+this.configuration.getNewRemotePath());
     }
 
 }

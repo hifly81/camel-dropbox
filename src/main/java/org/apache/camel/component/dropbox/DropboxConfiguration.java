@@ -27,6 +27,8 @@ public class DropboxConfiguration {
     private String accessToken;
     private String localPath;
     private String remotePath;
+    private String newRemotePath;
+    private String query;
     //operation supported
     private DropboxOperation operation;
     //reference to dropboxclient
@@ -99,6 +101,23 @@ public class DropboxConfiguration {
     public void setRemotePath(String remotePath) {
         this.remotePath = remotePath;
     }
+
+    public String getNewRemotePath() {
+        return newRemotePath;
+    }
+
+    public void setNewRemotePath(String newRemotePath) {
+        this.newRemotePath = newRemotePath;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
 
     public DropboxOperation getOperation() {
         return operation;

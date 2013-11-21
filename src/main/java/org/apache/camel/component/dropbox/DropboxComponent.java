@@ -40,6 +40,8 @@ public class DropboxComponent extends DefaultComponent {
         configuration.setAccessToken((String)parameters.get("accessToken"));
         configuration.setLocalPath((String)parameters.get("localPath"));
         configuration.setRemotePath((String)parameters.get("remotePath"));
+        configuration.setNewRemotePath((String)parameters.get("newRemotePath"));
+        configuration.setQuery((String)parameters.get("query"));
         configuration.setOperation(DropboxOperation.valueOf(remaining));
 
         // and then override from parameters

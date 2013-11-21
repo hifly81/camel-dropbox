@@ -14,12 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.dropbox;
+package org.apache.camel.component.dropbox.producer;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.dropbox.util.DropboxConstants;
+import org.apache.camel.component.dropbox.util.DropboxResultOpCode;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
@@ -48,6 +49,7 @@ public class DropboxProducerPutSingleFileTest extends CamelTestSupport {
         Object header =  exchange.getIn().getHeader(DropboxConstants.UPLOADED_FILE);
         Object body = exchange.getIn().getBody();
         assertNotNull(headerCode);
+        assertEquals(headerCode.toString(), DropboxResultOpCode.OK);
         assertNotNull(header);
         assertNotNull(body);
 

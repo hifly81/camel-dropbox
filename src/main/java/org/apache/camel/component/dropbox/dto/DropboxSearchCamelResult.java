@@ -5,7 +5,6 @@ import org.apache.camel.Exchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +19,9 @@ import static org.apache.camel.component.dropbox.util.DropboxConstants.ENTRIES;
  * Time: 7:43 PM
  * To change this template use File | Settings | File Templates.
  */
-public class DropboxListCamelResult extends DropboxCamelResult {
+public class DropboxSearchCamelResult extends DropboxCamelResult {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxListCamelResult.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxSearchCamelResult.class);
 
     @Override
     public void populateExchange(Exchange exchange) {

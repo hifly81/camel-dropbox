@@ -12,6 +12,7 @@ import static org.apache.camel.component.dropbox.util.DropboxConstants.DROPBOX_F
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -56,17 +57,33 @@ public class DropboxAPIFacade {
 
     }
 
-    public DropboxCamelResult list(String remotePath) throws Exception {
+    public DropboxCamelResult search(String remotePath,String query) throws Exception {
         DropboxCamelResult result = null;
-        DbxEntry.WithChildren listing = instance.client.getMetadataWithChildren(remotePath);
-        result = new DropboxListCamelResult();
-        result.setDropboxObjs(listing.children);
+        DbxEntry.WithChildren listing = null;
+        if(query == null) {
+            listing = instance.client.getMetadataWithChildren(remotePath);
+            result = new DropboxSearchCamelResult();
+            result.setDropboxObjs(listing.children);
+        }
+        else {
+            LOG.info("search by query:"+query);
+            List<DbxEntry> entries = instance.client.searchFileAndFolderNames(remotePath,query);
+            result = new DropboxSearchCamelResult();
+            result.setDropboxObjs(entries);
+        }
         return result;
     }
 
     public DropboxCamelResult del(String remotePath) throws Exception {
         DropboxCamelResult result = null;
         instance.client.delete(remotePath);
+        result = new DropboxGenericCamelResult();
+        return result;
+    }
+
+    public DropboxCamelResult move(String remotePath,String newRemotePath) throws Exception {
+        DropboxCamelResult result = null;
+        instance.client.move(remotePath, newRemotePath);
         result = new DropboxGenericCamelResult();
         return result;
     }
