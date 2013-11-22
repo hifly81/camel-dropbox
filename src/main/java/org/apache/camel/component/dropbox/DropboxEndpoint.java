@@ -18,6 +18,7 @@ package org.apache.camel.component.dropbox;
 
 import org.apache.camel.component.dropbox.consumer.DropboxScheduledPollConsumer;
 import org.apache.camel.component.dropbox.consumer.DropboxScheduledPollGetConsumer;
+import org.apache.camel.component.dropbox.consumer.DropboxScheduledPollSearchConsumer;
 import org.apache.camel.component.dropbox.producer.*;
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
@@ -26,6 +27,8 @@ import org.apache.camel.component.dropbox.util.DropboxOperation;
 import org.apache.camel.impl.DefaultEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.apache.camel.component.dropbox.util.DropboxConstants.POLL_CONSUMER_DELAY;
 
 /**
  * Represents a Camel Dropbox endpoint.
@@ -67,22 +70,26 @@ public class DropboxEndpoint extends DefaultEndpoint {
             return new DropboxMoveProducer(this,this.configuration);
         }
         else {
-            throw new IllegalArgumentException("operation specified is not supprted by this component!");
+            throw new IllegalArgumentException("operation specified is not supported by this component!");
         }
     }
 
     public Consumer createConsumer(Processor processor) throws Exception {
         LOG.debug("resolve consumer dropbox endpoint {" + this.configuration.getOperation().toString() + "}");
         LOG.debug("resolve consumer dropbox attached client:"+this.configuration.getClient());
+        DropboxScheduledPollConsumer consumer = null;
         if(this.configuration.getOperation() == DropboxOperation.search) {
-            //TODO implement search consumer
-            return new DropboxScheduledPollGetConsumer(this, processor,configuration);
+            consumer = new DropboxScheduledPollSearchConsumer(this,processor,this.configuration);
+            consumer.setDelay(POLL_CONSUMER_DELAY);
+            return consumer;
         }
         else if(this.configuration.getOperation() == DropboxOperation.get) {
-            return new DropboxScheduledPollGetConsumer(this, processor,configuration);
+            consumer = new DropboxScheduledPollGetConsumer(this,processor,this.configuration);
+            consumer.setDelay(POLL_CONSUMER_DELAY);
+            return consumer;
         }
         else {
-            throw new IllegalArgumentException("operation specified is not supprted by this component!");
+            throw new IllegalArgumentException("operation specified is not supported by this component!");
         }
     }
 
