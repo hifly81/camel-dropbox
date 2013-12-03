@@ -14,27 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.dropbox.consumer;
+package org.apache.camel.component.dropbox.dto;
 
-import org.apache.camel.component.dropbox.DropboxConfiguration;
-import org.apache.camel.component.dropbox.DropboxEndpoint;
-import org.apache.camel.Processor;
-import org.apache.camel.impl.ScheduledPollConsumer;
+import org.apache.camel.Exchange;
+import org.apache.camel.component.dropbox.util.DropboxResultHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public abstract class DropboxScheduledPollConsumer extends ScheduledPollConsumer {
-    protected static final transient Logger LOG = LoggerFactory.getLogger(DropboxScheduledPollConsumer.class);
-    protected DropboxEndpoint endpoint;
-    protected DropboxConfiguration configuration;
+public class DropboxMoveResult extends DropboxResult {
 
-    public DropboxScheduledPollConsumer(DropboxEndpoint endpoint, Processor processor, DropboxConfiguration configuration) {
-        super(endpoint, processor);
-        this.endpoint = endpoint;
-        this.configuration = configuration;
-    }
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxMoveResult.class);
 
     @Override
-    protected abstract int poll() throws Exception;
+    public void populateExchange(Exchange exchange) {
+        String movedPath = (String)resultEntries;
+        exchange.getIn().setHeader(DropboxResultHeader.MOVED_PATH.name(),movedPath);
+        exchange.getIn().setBody(movedPath);
+    }
 }

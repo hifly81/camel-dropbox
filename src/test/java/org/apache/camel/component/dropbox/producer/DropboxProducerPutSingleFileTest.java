@@ -19,15 +19,17 @@ package org.apache.camel.component.dropbox.producer;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.dropbox.DropboxTestSupport;
 import org.apache.camel.component.dropbox.util.DropboxConstants;
-import org.apache.camel.component.dropbox.util.DropboxResultOpCode;
+import org.apache.camel.component.dropbox.util.DropboxResultHeader;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
 import java.util.List;
 
-public class DropboxProducerPutSingleFileTest extends CamelTestSupport {
+public class DropboxProducerPutSingleFileTest extends DropboxTestSupport {
+
+    public DropboxProducerPutSingleFileTest() throws Exception {}
 
     @Test
     public void testCamelDropbox() throws Exception {
@@ -45,14 +47,10 @@ public class DropboxProducerPutSingleFileTest extends CamelTestSupport {
 
         List<Exchange> exchanges = mock.getReceivedExchanges();
         Exchange exchange = exchanges.get(0);
-        Object headerCode =  exchange.getIn().getHeader(DropboxConstants.RESULT_OP_CODE);
-        Object header =  exchange.getIn().getHeader(DropboxConstants.UPLOADED_FILE);
+        Object header =  exchange.getIn().getHeader(DropboxResultHeader.UPLOADED_FILE.name());
         Object body = exchange.getIn().getBody();
-        assertNotNull(headerCode);
-        assertEquals(headerCode.toString(), DropboxResultOpCode.OK);
         assertNotNull(header);
         assertNotNull(body);
-
     }
 
     @Override
@@ -60,7 +58,7 @@ public class DropboxProducerPutSingleFileTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start")
-                        .to("dropbox://put?appKey=XXX&appSecret=XXX&accessToken=XXX&localPath=/XXX")
+                        .to("dropbox://put?"+getAuthParams()+"&uploadMode=add&localPath=/XXX")
                         .to("mock:result");
             }
         };

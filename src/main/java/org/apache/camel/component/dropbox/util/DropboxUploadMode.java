@@ -16,14 +16,11 @@
  */
 package org.apache.camel.component.dropbox.util;
 
-public enum DropboxOperation {
-    put("put"),
-    del("del"),
-    search("search"),
-    get("get"),
-    move("move");
+public enum DropboxUploadMode {
+    add("add"),
+    force("force");
 
-    private DropboxOperation(final String text) {
+    private DropboxUploadMode(final String text) {
         this.text = text;
     }
 

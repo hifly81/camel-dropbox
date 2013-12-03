@@ -16,23 +16,8 @@
  */
 package org.apache.camel.component.dropbox.util;
 
-public enum DropboxOperation {
-    put("put"),
-    del("del"),
-    search("search"),
-    get("get"),
-    move("move");
-
-    private DropboxOperation(final String text) {
-        this.text = text;
+public class DropboxException extends Exception {
+    public DropboxException(String message) {
+        super(message);
     }
-
-    private final String text;
-
-    @Override
-    public String toString() {
-        return text;
-    }
-
 }
-

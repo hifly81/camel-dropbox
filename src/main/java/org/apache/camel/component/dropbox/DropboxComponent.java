@@ -20,13 +20,13 @@ import java.util.Map;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.component.dropbox.util.DropboxOperation;
+import org.apache.camel.component.dropbox.util.DropboxPropertyManager;
+import org.apache.camel.component.dropbox.util.DropboxUploadMode;
+import org.apache.camel.component.dropbox.validator.DropboxConfigurationValidator;
 import org.apache.camel.impl.DefaultComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Represents the component that manages {@link DropboxEndpoint}.
- */
 public class DropboxComponent extends DefaultComponent {
 
     private static final transient Logger LOG = LoggerFactory.getLogger(DropboxComponent.class);
@@ -35,14 +35,22 @@ public class DropboxComponent extends DefaultComponent {
         DropboxConfiguration configuration = new DropboxConfiguration();
 
         // set options from component
-        configuration.setAppKey((String) parameters.get("appKey"));
-        configuration.setAppSecret((String)parameters.get("appSecret"));
         configuration.setAccessToken((String)parameters.get("accessToken"));
         configuration.setLocalPath((String)parameters.get("localPath"));
         configuration.setRemotePath((String)parameters.get("remotePath"));
         configuration.setNewRemotePath((String)parameters.get("newRemotePath"));
         configuration.setQuery((String)parameters.get("query"));
         configuration.setOperation(DropboxOperation.valueOf(remaining));
+        configuration.setClientIdentifier(
+                parameters.get("clientIdentifier")==null?
+                        DropboxPropertyManager.getInstance().getProperty("clientIdentifier")
+                        :(String) parameters.get("clientIdentifier"));
+        if(parameters.get("uploadMode")!=null) {
+            configuration.setUploadMode(DropboxUploadMode.valueOf((String)parameters.get("uploadMode")));
+        }
+
+        //pass validation test
+        DropboxConfigurationValidator.validate(configuration);
 
         // and then override from parameters
         setProperties(configuration, parameters);
@@ -50,7 +58,7 @@ public class DropboxComponent extends DefaultComponent {
         //create dropbox client
         configuration.createClient();
 
-        LOG.debug("dropbox configuration set!");
+        LOG.info("dropbox configuration set!");
 
         Endpoint endpoint = new DropboxEndpoint(uri,this,configuration);
         return endpoint;

@@ -14,30 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.dropbox.producer;
+package org.apache.camel.component.dropbox.consumer;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.dropbox.DropboxTestSupport;
 import org.apache.camel.component.dropbox.util.DropboxConstants;
-import org.apache.camel.component.dropbox.util.DropboxResultOpCode;
+import org.apache.camel.component.dropbox.util.DropboxResultHeader;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
 import java.util.List;
 
-public class DropboxProducerGetTest extends CamelTestSupport {
+public class DropboxConsumerGetSingleTest extends DropboxTestSupport {
+
+    public DropboxConsumerGetSingleTest() throws Exception {}
 
     @Test
     public void testCamelDropbox() throws Exception {
-        template.send("direct:start", new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader("test", "test");
-            }
-        });
-
 
         MockEndpoint mock = getMockEndpoint("mock:result");
         mock.expectedMinimumMessageCount(1);       
@@ -45,23 +39,18 @@ public class DropboxProducerGetTest extends CamelTestSupport {
 
         List<Exchange> exchanges = mock.getReceivedExchanges();
         Exchange exchange = exchanges.get(0);
-        Object headerCode =  exchange.getIn().getHeader(DropboxConstants.RESULT_OP_CODE);
-        Object header =  exchange.getIn().getHeader(DropboxConstants.DOWNLOADED_FILE);
+        Object header =  exchange.getIn().getHeader(DropboxResultHeader.DOWNLOADED_FILE.name());
         Object body = exchange.getIn().getBody();
-        assertNotNull(headerCode);
-        assertEquals(headerCode.toString(), DropboxResultOpCode.OK);
         assertNotNull(header);
         assertNotNull(body);
-
     }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("direct:start")
-                        .to("dropbox://get?appKey=XXX&appSecret=XXX&accessToken=XXX&remotePath=/test.pdf")
-                        .to("file:///XXX?fileName=XXX")
+                from("dropbox://get?"+getAuthParams()+"&remotePath=/test.pdf")
+                        .to("file:///home/hifly/Desktop?fileName=pp.pdf")
                         .to("mock:result");
             }
         };

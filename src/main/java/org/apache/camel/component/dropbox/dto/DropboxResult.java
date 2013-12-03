@@ -14,25 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.dropbox.util;
+package org.apache.camel.component.dropbox.dto;
 
-public enum DropboxOperation {
-    put("put"),
-    del("del"),
-    search("search"),
-    get("get"),
-    move("move");
+import org.apache.camel.Exchange;
 
-    private DropboxOperation(final String text) {
-        this.text = text;
+
+public abstract class DropboxResult {
+
+    protected Object resultEntries;
+
+    public abstract void populateExchange(Exchange exchange);
+
+    public Object getResultEntries()  {
+        return resultEntries;
     }
 
-    private final String text;
-
-    @Override
-    public String toString() {
-        return text;
+    public void setResultEntries(Object resultEntries) {
+        this.resultEntries = resultEntries;
     }
 
 }
-

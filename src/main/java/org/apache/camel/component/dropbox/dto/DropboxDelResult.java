@@ -14,27 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.dropbox.consumer;
+package org.apache.camel.component.dropbox.dto;
 
-import org.apache.camel.component.dropbox.DropboxConfiguration;
-import org.apache.camel.component.dropbox.DropboxEndpoint;
-import org.apache.camel.Processor;
-import org.apache.camel.impl.ScheduledPollConsumer;
+import com.dropbox.core.DbxEntry;
+import org.apache.camel.Exchange;
+import org.apache.camel.component.dropbox.util.DropboxResultHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 
-public abstract class DropboxScheduledPollConsumer extends ScheduledPollConsumer {
-    protected static final transient Logger LOG = LoggerFactory.getLogger(DropboxScheduledPollConsumer.class);
-    protected DropboxEndpoint endpoint;
-    protected DropboxConfiguration configuration;
 
-    public DropboxScheduledPollConsumer(DropboxEndpoint endpoint, Processor processor, DropboxConfiguration configuration) {
-        super(endpoint, processor);
-        this.endpoint = endpoint;
-        this.configuration = configuration;
-    }
+public class DropboxDelResult extends DropboxResult {
+
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxDelResult.class);
 
     @Override
-    protected abstract int poll() throws Exception;
+    public void populateExchange(Exchange exchange) {
+        String remotePath = (String)resultEntries;
+        exchange.getIn().setHeader(DropboxResultHeader.DELETED_PATH.name(),remotePath);
+        exchange.getIn().setBody(remotePath);
+    }
 }

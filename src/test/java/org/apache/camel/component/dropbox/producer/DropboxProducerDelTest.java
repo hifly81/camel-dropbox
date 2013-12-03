@@ -19,15 +19,17 @@ package org.apache.camel.component.dropbox.producer;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.dropbox.DropboxTestSupport;
 import org.apache.camel.component.dropbox.util.DropboxConstants;
-import org.apache.camel.component.dropbox.util.DropboxResultOpCode;
+import org.apache.camel.component.dropbox.util.DropboxResultHeader;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
 import java.util.List;
 
-public class DropboxProducerDelTest extends CamelTestSupport {
+public class DropboxProducerDelTest extends DropboxTestSupport {
+
+    public DropboxProducerDelTest() throws Exception {}
 
     @Test
     public void testCamelDropbox() throws Exception {
@@ -45,10 +47,10 @@ public class DropboxProducerDelTest extends CamelTestSupport {
 
         List<Exchange> exchanges = mock.getReceivedExchanges();
         Exchange exchange = exchanges.get(0);
-        Object headerCode =  exchange.getIn().getHeader(DropboxConstants.RESULT_OP_CODE);
-        assertNotNull(headerCode);
-        assertEquals(headerCode.toString(), DropboxResultOpCode.OK);
-
+        Object header =  exchange.getIn().getHeader(DropboxResultHeader.DELETED_PATH.name());
+        Object body = exchange.getIn().getBody();
+        assertNotNull(header);
+        assertNotNull(body);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class DropboxProducerDelTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start")
-                        .to("dropbox://del?appKey=XXX&appSecret=XXX&accessToken=XXX&remotePath=/test")
+                        .to("dropbox://del?"+getAuthParams()+"&remotePath=/XXX")
                         .to("mock:result");
             }
         };

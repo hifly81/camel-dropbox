@@ -14,28 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.component.dropbox.producer;
+package org.apache.camel.component.dropbox.dto;
 
+import com.dropbox.core.DbxEntry;
 import org.apache.camel.Exchange;
-import org.apache.camel.component.dropbox.DropboxConfiguration;
-import org.apache.camel.component.dropbox.DropboxEndpoint;
-import org.apache.camel.component.dropbox.core.DropboxAPIFacade;
-import org.apache.camel.component.dropbox.dto.DropboxResult;
+import org.apache.camel.component.dropbox.util.DropboxResultHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DropboxSearchProducer extends DropboxProducer {
-    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxSearchProducer.class);
+import java.util.List;
 
-    public DropboxSearchProducer(DropboxEndpoint endpoint, DropboxConfiguration configuration) {
-        super(endpoint,configuration);
-    }
+
+public class DropboxSearchResult extends DropboxResult {
+
+    private static final transient Logger LOG = LoggerFactory.getLogger(DropboxSearchResult.class);
 
     @Override
-    public void process(Exchange exchange) throws Exception {
-        DropboxResult result = DropboxAPIFacade.getInstance(configuration.getClient())
-                .search(configuration.getRemotePath(),configuration.getQuery());
-        result.populateExchange(exchange);
+    public void populateExchange(Exchange exchange) {
+        StringBuffer fileExtracted = new StringBuffer();
+        List<DbxEntry> entries = null;
+        if (resultEntries != null) {
+            entries = (List<DbxEntry>) resultEntries;
+            for (DbxEntry entry : entries) {
+                fileExtracted.append(entry.name + "-" + entry.path + "\n");
+            }
+        }
+        exchange.getIn().setHeader(DropboxResultHeader.FOUNDED_FILES.name(), fileExtracted.toString());
+        exchange.getIn().setBody(entries);
     }
-
 }
