@@ -48,10 +48,18 @@ public class DropboxConfiguration {
     //reference to dropboxclient
     private DbxClient client;
 
+    public void setClient(DbxClient client) {
+        this.client = client;
+    }
+
     public DbxClient getClient() {
         return client;
     }
 
+    /**
+     * Obtain a new instance of DbxClient and store it in configuration.
+     * @throws DropboxException
+     */
     public void createClient() throws DropboxException {
         DbxRequestConfig config =
                 new DbxRequestConfig(clientIdentifier, Locale.getDefault().toString());

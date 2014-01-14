@@ -37,4 +37,36 @@ public abstract class DropboxScheduledPollConsumer extends ScheduledPollConsumer
 
     @Override
     protected abstract int poll() throws Exception;
+
+    /**
+     * Lifecycle method invoked when the consumer has created.
+     * Internally create or reuse a connection to the low level dropbox client
+     * @throws Exception
+     */
+    @Override
+    protected void doStart() throws Exception {
+        if(configuration.getClient() == null) {
+            //create dropbox client
+            configuration.createClient();
+
+            LOG.info("consumer dropbox client created");
+        }
+
+        super.doStart();
+    }
+
+    /**
+     * Lifecycle method invoked when the consumer has destroyed.
+     * Erase the reference to the dropbox low level client
+     * @throws Exception
+     */
+    @Override
+    protected void doStop() throws Exception {
+        if (configuration.getClient() == null) {
+            configuration.setClient(null);
+
+            LOG.info("consumer dropbox client deleted");
+        }
+        super.doStop();
+    }
 }
